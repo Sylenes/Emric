@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Paiement - L'Emric</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: #f5f5f5;
+    }
+
+    .navbar {
+      background-color: #3b3b3b;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      margin: 0 10px;
+      transition: background-color 0.3s ease;
+    }
+
+    .navbar a:hover {
+      background-color: #555;
+    }
+
+    .navbar .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .navbar .logo span {
+      color: #ffffff;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    .pay-button {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      background-color: #00a00d;
+      color: white;
+      border: none;
+      font-size: 16px;
+      border-radius: 5px;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+
+    .pay-button:hover {
+      background-color: #00800a;
+    }
+
+    .payment-icons {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 30px;
+    }
+
+    .payment-icons img {
+      width: 50px;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <div class="logo">L'<span>Emric</span></div>
+    <div>
+      <a href="index.html">Accueil</a>
+      <a href="compte.html">Compte</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2>Informations de Paiement</h2>
+
+    <input type="text" id="nom" placeholder="Nom du titulaire de la carte" required>
+    <input type="text" id="numero" placeholder="Numéro de carte (16 chiffres)" maxlength="16" required>
+    <input type="text" id="expiration" placeholder="Date d'expiration (MM/AA)" maxlength="5" required>
+    <input type="text" id="cvc" placeholder="CVC (3 chiffres)" maxlength="3" required>
+
+    <button class="pay-button" id="payButton">Payer</button>
+
+    <div class="payment-icons">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png" alt="Mastercard">
+      <img src="https://tse2.mm.bing.net/th?id=OIP.5OA8W4y3tR5ACnlHvJUWVgHaEe&pid=Api." alt="Google Pay">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Pay">
+    </div>
+  </div>
+
+  <script>
+    // Auto-format MM/AA
+    document.getElementById("expiration").addEventListener("input", function (e) {
+      let value = e.target.value.replace(/\D/g, ""); // remove non-digits
+      if (value.length > 4) value = value.slice(0, 4);
+
+      if (value.length > 2) {
+        value = value.slice(0, 2) + "/" + value.slice(2);
+      }
+
+      e.target.value = value;
+    });
+
+    document.getElementById("payButton").addEventListener("click", function () {
+      const nom = document.getElementById("nom").value.trim();
+      const numero = document.getElementById("numero").value.trim();
+      const expiration = document.getElementById("expiration").value.trim();
+      const cvc = document.getElementById("cvc").value.trim();
+
+      if (!nom || !numero || !expiration || !cvc) {
+        alert("Veuillez remplir tous les champs.");
+        return;
+      }
+
+      if (!/^\d{16}$/.test(numero)) {
+        alert("Le numéro de carte doit contenir exactement 16 chiffres.");
+        return;
+      }
+
+      if (!/^\d{2}\/\d{2}$/.test(expiration)) {
+        alert("La date d'expiration doit être au format MM/AA.");
+        return;
+      }
+
+      if (!/^\d{3}$/.test(cvc)) {
+        alert("Le CVC doit contenir exactement 3 chiffres.");
+        return;
+      }
+
+      // Si tout est bon
+      window.location.href = "Payement OK.html";
+    });
+  </script>
+
+</body>
+</html>

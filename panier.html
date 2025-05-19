@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Panier - L'Emric</title> 
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: #f5f5f5;
+    }
+
+    .navbar {
+      background-color: #3b3b3b;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      margin: 0 10px;
+      transition: background-color 0.3s ease;
+    }
+
+    .navbar a:hover {
+      background-color: #555;
+    }
+
+    .navbar .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .navbar .logo span {
+      color: #ffffff;
+    }
+
+    .navbar .logo:hover {
+      background-color: #555; /* Ajout d'un effet hover */
+      border-radius: 4px;
+      padding: 10px 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .cart-item span {
+      flex: 1;
+    }
+
+    .remove-btn {
+      padding: 5px 10px;
+      background-color: #a51e1e;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .remove-btn:hover {
+      background-color: #8c1818;
+    }
+
+    .total {
+      text-align: right;
+      font-size: 18px;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    .checkout-button {
+      display: block;
+      width: 200px;
+      padding: 10px 15px;
+      background-color: #00a00d;
+      color: white;
+      border: none;
+      font-size: 16px;
+      border-radius: 5px;
+      margin: 30px auto 0 auto;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .checkout-button:hover {
+      background-color: #00800a;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <a href="index.html" class="logo">L'<span>Emric</span></a> <!-- Lien cliquable -->
+    <div>
+      <a href="index.html">Accueil</a>
+      <a href="compte.html">Compte</a>
+      <a href="panier.html" class="panier-logo">
+        🛒 <span id="cart-count" style="background:#00a00d; color:white; padding:2px 6px; border-radius:50%; font-size:14px;">0</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2>Votre Panier</h2>
+    <div id="cart-items"></div>
+    <div class="total" id="total-price"></div>
+    <a href="Payement.html" class="checkout-button">Passer au paiement</a>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const cartItemsContainer = document.getElementById('cart-items');
+      const totalPriceEl = document.getElementById('total-price');
+      const cartCountEl = document.getElementById('cart-count');
+  
+      function updateCartCount() {
+        cartCountEl.textContent = cart.length;
+      }
+  
+      function groupCartItems(cart) {
+        const grouped = {};
+        cart.forEach(item => {
+          if (grouped[item.title]) {
+            grouped[item.title].quantity += 1;
+          } else {
+            grouped[item.title] = { ...item, quantity: 1 };
+          }
+        });
+        return Object.values(grouped);
+      }
+  
+      function renderCart() {
+        cartItemsContainer.innerHTML = '';
+        let total = 0;
+  
+        if (cart.length === 0) {
+          cartItemsContainer.innerHTML = '<p>Votre panier est vide.</p>';
+          totalPriceEl.innerHTML = '';
+          updateCartCount();
+          return;
+        }
+  
+        const groupedItems = groupCartItems(cart);
+  
+        groupedItems.forEach((item) => {
+          const itemTotal = item.price * item.quantity;
+          const div = document.createElement('div');
+          div.className = 'cart-item';
+          div.innerHTML = `
+            <span>${item.title}</span>
+            <span>${item.price.toFixed(2)} € × ${item.quantity} = ${itemTotal.toFixed(2)} €</span>
+            <div>
+              <button class="remove-btn" onclick="removeOne('${item.title}')">-1</button>
+              <button class="remove-btn" onclick="addOne('${item.title}')">+1</button>
+              <button class="remove-btn" onclick="removeAll('${item.title}')">Supprimer</button>
+            </div>
+          `;
+          cartItemsContainer.appendChild(div);
+          total += itemTotal;
+        });
+  
+        totalPriceEl.innerHTML = `
+          Total : ${total.toFixed(2)} €<br>
+          <button class="remove-btn" style="margin-top: 10px;" onclick="clearCart()">Vider le panier</button>
+        `;
+        updateCartCount();
+      }
+  
+      // Retirer 1 article
+      window.removeOne = function(title) {
+        const index = cart.findIndex(item => item.title === title);
+        if (index !== -1) {
+          cart.splice(index, 1);
+          localStorage.setItem('cart', JSON.stringify(cart));
+          renderCart();
+        }
+      };
+  
+      // Ajouter 1 article
+      window.addOne = function(title) {
+        const existing = cart.find(item => item.title === title);
+        if (existing) {
+          cart.push({ title: existing.title, price: existing.price });
+          localStorage.setItem('cart', JSON.stringify(cart));
+          renderCart();
+        }
+      };
+  
+      // Supprimer tout un article
+      window.removeAll = function(title) {
+        cart = cart.filter(item => item.title !== title);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        renderCart();
+      };
+  
+      // Vider tout le panier
+      window.clearCart = function() {
+        cart = [];
+        localStorage.setItem('cart', JSON.stringify(cart));
+        renderCart();
+      };
+  
+      renderCart();
+    });
+  </script>
+
+</body>
+</html>
