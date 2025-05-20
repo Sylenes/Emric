@@ -55,11 +55,18 @@
       margin-bottom: 30px;
     }
 
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+    }
+
     input[type="text"],
     input[type="number"] {
       width: 100%;
       padding: 10px;
-      margin: 10px 0;
+      margin-bottom: 10px;
       border-radius: 5px;
       border: 1px solid #ccc;
       font-size: 16px;
@@ -107,9 +114,16 @@
   <div class="container">
     <h2>Informations de Paiement</h2>
 
+    <label for="nom">0 - Nom du titulaire</label>
     <input type="text" id="nom" placeholder="Nom du titulaire de la carte" required>
-    <input type="text" id="numero" placeholder="Numéro de carte (16 chiffres)" maxlength="16" required>
-    <input type="text" id="expiration" placeholder="Date d'expiration (MM/AA)" maxlength="5" required>
+
+    <label for="numero">1 - Numéro de carte</label>
+    <input type="text" id="numero" placeholder="1234-5678-9012-3456" maxlength="19" required>
+
+    <label for="expiration">2 - Date d'expiration</label>
+    <input type="text" id="expiration" placeholder="MM/AA" maxlength="5" required>
+
+    <label for="cvc">3 - CVC</label>
     <input type="text" id="cvc" placeholder="CVC (3 chiffres)" maxlength="3" required>
 
     <button class="pay-button" id="payButton">Payer</button>
@@ -125,15 +139,38 @@
   <script>
     // Auto-format MM/AA
     document.getElementById("expiration").addEventListener("input", function (e) {
-      let value = e.target.value.replace(/\D/g, ""); // remove non-digits
+      let value = e.target.value.replace(/\D/g, "");
       if (value.length > 4) value = value.slice(0, 4);
-
       if (value.length > 2) {
         value = value.slice(0, 2) + "/" + value.slice(2);
       }
-
       e.target.value = value;
     });
+
+    // Auto-format numéro de carte XXXX-XXXX-XXXX-XXXX
+    document.getElementById("numero").addEventListener("input", function (e) {
+      let value = e.target.value.replace(/\D/g, "");
+      if (value.length > 16) value = value.slice(0, 16);
+      let formatted = value.match(/.{1,4}/g);
+      e.target.value = formatted ? formatted.join("-") : "";
+    });
+
+    // Algorithme de Luhn pour vérifier la validité du numéro
+    function carteValideLuhn(numero) {
+      let num = numero.replace(/\D/g, "");
+      let sum = 0;
+      let shouldDouble = false;
+      for (let i = num.length - 1; i >= 0; i--) {
+        let digit = parseInt(num[i]);
+        if (shouldDouble) {
+          digit *= 2;
+          if (digit > 9) digit -= 9;
+        }
+        sum += digit;
+        shouldDouble = !shouldDouble;
+      }
+      return sum % 10 === 0;
+    }
 
     document.getElementById("payButton").addEventListener("click", function () {
       const nom = document.getElementById("nom").value.trim();
@@ -146,8 +183,9 @@
         return;
       }
 
-      if (!/^\d{16}$/.test(numero)) {
-        alert("Le numéro de carte doit contenir exactement 16 chiffres.");
+      const numClean = numero.replace(/\D/g, "");
+      if (numClean.length !== 16 || !carteValideLuhn(numero)) {
+        alert("Numéro de carte invalide.");
         return;
       }
 
