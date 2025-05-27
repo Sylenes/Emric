@@ -13,6 +13,31 @@
             background-color: #f5f5f5;
         }
 
+          /* Colonne gauche et droite */
+  .side {
+    flex: 1;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  /* Colonne centrale pour les produits */
+  .center {
+    flex: 2; /* largeur double par rapport aux côtés */
+    background: white;
+    padding: 20px;
+    overflow-x: hidden; /* empêche débordement horizontal */
+  }
+
+  /* Exemple pour les images des côtés */
+  .left {
+    background-image: url('https://m.media-amazon.com/images/I/61VPwY98yWL._AC_SL1500_.jpg');
+  }
+
+  .right {
+    background-image: url('https://static.grafitee.fr/59318/t-shirt-homme-noir.jpg');
+  }
+
         .navbar {
             background-color: #3b3b3b;
             padding: 10px 20px;
