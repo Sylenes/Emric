@@ -1,114 +1,322 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8" />
-<title>L'Emric</title>
-<style>
-  /* Reset basique */
-  * {
-    box-sizing: border-box;
-  }
-  body, html {
-    margin: 0; padding: 0; height: 100vh;
-    background-color: #f5f5f5;
-    font-family: Arial, sans-serif;
-  }
+    <meta charset="UTF-8">
+    <title>L'Emric</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Import de la police Roboto -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
 
-  /* Conteneur principal en flex */
-  .container {
-    display: flex;
-    min-height: 100vh;
-  }
+        .navbar {
+            background-color: #3b3b3b;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
 
-  /* Colonne gauche et droite */
-  .side {
-    flex: 1;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-  }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            font-family: 'Roboto', sans-serif;
+            transition: background-color 0.3s ease;
+        }
 
-  /* Colonne centrale pour les produits */
-  .center {
-    flex: 2; /* largeur double par rapport aux côtés */
-    background: white;
-    padding: 20px;
-    overflow-x: hidden; /* empêche débordement horizontal */
-  }
+        .navbar a:hover {
+            background-color: #555;
+        }
 
-  /* Exemple pour les images des côtés */
-  .left {
-    background-image: url('https://m.media-amazon.com/images/I/61VPwY98yWL._AC_SL1500_.jpg');
-  }
+        .navbar .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
 
-  .right {
-    background-image: url('https://static.grafitee.fr/59318/t-shirt-homme-noir.jpg');
-  }
+        .navbar .logo span {
+            color: #ffffff;
+        }
 
-  /* Style des produits (exemple) */
-  .products {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-  }
-  .product {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    width: 200px;
-    padding: 15px;
-    text-align: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
-  .product img {
-    width: 100%;
-    border-radius: 4px;
-  }
-  .price {
-    color: #a51e1e;
-    font-weight: bold;
-  }
-  .buy-button {
-    margin-top: 10px;
-    padding: 10px 20px;
-    background-color: #888;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  .buy-button:hover {
-    background-color: #00a00d;
-  }
-</style>
+        .panier-logo {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        header {
+            background-color: #3b3b3b;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        .products {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .product {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 200px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .product img {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .product h3 {
+            margin: 10px 0 5px;
+            font-size: 18px;
+        }
+
+        .product p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .price {
+            color: #a51e1e;
+            font-weight: bold;
+        }
+
+        .buy-button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #888;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .buy-button:hover {
+            background-color: #00a00d;
+        }
+
+        .buy-button.clicked {
+            background-color: #555;
+            transform: scale(0.95);
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        #contact {
+            padding: 40px;
+            background-color: #f1f1f1;
+            margin-top: 40px;
+        }
+
+        #contact h3 {
+            margin-bottom: 10px;
+        }
+
+        #contact p {
+            color: #555;
+        }
+    </style>
 </head>
+
 <body>
-
-<div class="container">
-  <div class="side left"></div>
-
-  <div class="center">
-    <h2 style="text-align:center;">Nos Produits</h2>
-    <div class="products">
-      <div class="product">
-        <img src="https://m.media-amazon.com/images/I/61VPwY98yWL._AC_SL1500_.jpg" alt="Mug personnalisable">
-        <h3>Mug personnalisable</h3>
-        <p class="price">15 €</p>
-        <button class="buy-button">Acheter</button>
-      </div>
-      <div class="product">
-        <img src="https://static.grafitee.fr/59318/t-shirt-homme-noir.jpg" alt="T-shirt noir">
-        <h3>T-shirt noir</h3>
-        <p class="price">9 €</p>
-        <button class="buy-button">Acheter</button>
-      </div>
-      <!-- Ajoute d'autres produits ici -->
+    <!-- Menu de navigation -->
+    <div class="navbar">
+        <a href="index.html" class="logo" style="text-decoration: none; color: white;">L'<span>Emric</span></a>
+        <div>
+            <a href="javascript:void(0)" onclick="scrollToContact()">Contact</a>
+            <a href="compte.html">Compte</a>
+            <a href="panier.html" class="panier-logo">
+                🛒 <span id="cart-count" style="background:#04ff00; color:white; padding:2px 6px; border-radius:50%; font-size:14px;">0</span>
+            </a>
+        </div>
     </div>
-  </div>
+    
 
-  <div class="side right"></div>
-</div>
+    <header>
+        Boutique française Numéro 1 en France 
+    </header>
 
+    <main>
+        <h2><center>Nos Produits</center></h2>
+        <div class="products">
+            <div class="product">
+                <img src="https://m.media-amazon.com/images/I/61VPwY98yWL._AC_SL1500_.jpg" alt="Mug personnalisable">
+                <h3>Mug personnalisable</h3>
+                <p class="price">15 €</p>
+                <button class="buy-button">Acheter</button>
+            </div>
+    
+            <div class="product">
+                <img src="https://static.grafitee.fr/59318/t-shirt-homme-noir.jpg" alt="T-shirt noir">
+                <h3>T-shirt noir</h3>
+                <p class="price">9 €</p>
+                <button class="buy-button">Acheter</button>
+            </div>
+    
+            <div class="product">
+                <img src="https://tse1.mm.bing.net/th?id=OIP.juXWJAcLUORtbBqBPmMK7QHaHa&pid=Api" alt="Sac à dos Eastpak">
+                <h3>Sac à dos Eastpak</h3>
+                <p class="price">12 €</p>
+                <button class="buy-button">Acheter</button>
+            </div>
+    
+            <div class="product">
+                <img src="https://m.media-amazon.com/images/I/71evxPrH6oL._AC_UY1000_.jpg" alt="Short noir">
+                <h3>Short noir</h3>
+                <p class="price">16 €</p>
+                <button class="buy-button">Acheter</button>
+            </div>
+    
+            <div class="product">
+                <img src="https://media.foot-store.fr/catalog/product/cache/image/1800x/9df78eab33525d08d6e5fb8d27136e95/n/i/nike_dn2557-355-vpsrh001.jpg" alt="Sacoche et porte-monnaie">
+                <h3>Sacoche et Porte-monnaie</h3>
+                <p class="price">20 €</p>
+                <button class="buy-button">Acheter</button>
+            </div>
+    
+            <!-- Ajout d'articles supplémentaires -->
+            <div class="product">
+                <img src="https://tse1.mm.bing.net/th?id=OIP.zkbaBOntbSwkO9WD5X2huQHaHa&pid=Api" alt="Casquette noire">
+                <h3>Casquette noire</h3>
+                <p class="price">14 €</p>
+                <button class="buy-button">Acheter</button>
+            </div>
+    
+            <div class="product">
+                <img src="https://www.bing.com/th?id=OPEC.hsm%2b%2b0usz9soZg474C474&o=5&pid=21.1" alt="Sweat à capuche noir">
+                <h3>Sweat à capuche noir</h3>
+                <p class="price">30 €</p>
+                <button class="buy-button">Acheter</button>
+            </div>
+    
+            <div class="product">
+                <img src="https://www.bing.com/th?id=OPEC.n5la3e9wb9rVJA474C474&o=5&pid=21.1" alt="Adidas YZY Slide noir">
+                <h3>Adidas YZY Slide noir</h3>
+                <p class="price">50 €</p>
+                <button class="buy-button">Acheter</button>
+            </div>
+    
+            <div class="product">
+                <img src="https://www.bing.com/th?id=OPEC.pF7oC6oB67VEDg474C474&o=5&pid=21.1" alt="Nike Air Force 1 noir">
+                <h3>Nike Air Force 1 noir</h3>
+                <p class="price">100 €</p>
+                <button class="buy-button">Acheter</button>
+            </div>
+    
+            <div class="product">
+                <img src="https://tse1.mm.bing.net/th?id=OIP.gIOoPC-2jDAloP4myaURcgHaHa&pid=Api" alt="Legging noir">
+                <h3>Legging noir</h3>
+                <p class="price">25 €</p>
+                <button class="buy-button">Acheter</button>
+            </div>
+    
+            <div class="product">
+                <img src="https://www.bing.com/th?id=OPEC.bqr9DRSFZmAdJA474C474&o=5&pid=21.1" alt="Hoodie McGregor noir">
+                <h3>Hoodie McGregor noir</h3>
+                <p class="price">45 €</p>
+                <button class="buy-button">Acheter</button>
+            </div>
+
+            <div class="product">
+                <img src="data:image/jpeg;base64,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" alt="pull gris">
+                <h3>pull en laine</h3>
+                <p class="price">25.21 €</p>
+                <button class="buy-button">Acheter</button>
+            </div>
+
+            <div class="product">
+                <img src="https://hugo-chabert.students-laplateforme.io/WP/wp-content/uploads/2022/04/GTI_9.jpg" alt="Peaugeot GTI">
+                <h3>Peaugeot GTI</h3>
+                <p class="price">1250.23€</p>
+                <button class="buy-button">Acheter</button>
+            </div>
+
+            <div class="product">
+                <img src="data:image/jpeg;base64,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" alt="Ordinateur">
+                <h3>Ordinateur portable</h3>
+                <p class="price">450 €</p>
+                <button class="buy-button">Acheter</button>
+            </div>
+
+            <div class="product">
+                <img src="https://www.bing.com/th?id=OPEC.Vn%2bMiEfdP3Oz3w474C474&o=5&pid=21.1" alt="Ballon">
+                <h3>Ballon Ligue 1</h3>
+                <p class="price">20€</p>
+                <button class="buy-button">Acheter</button>
+            </div>
+        </div>
+    </main>
+    
+
+    <!-- Section Contact -->
+    <section id="contact">
+        <h3>Contactez-nous</h3>
+        <p>Pour toute question, vous pouvez nous contacter à l'adresse suivante :</p>
+        <p><strong>Email :</strong> contact@lemric.com</p>
+        <p><strong>Téléphone :</strong> +33 06 06 06 06 06</p>
+    </section>
+
+    <!-- Script propre à la fin -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttons = document.querySelectorAll('.buy-button');
+
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const product = button.closest('.product');
+                    const title = product.querySelector('h3').innerText;
+                    const priceText = product.querySelector('.price').innerText;
+                    const price = parseFloat(priceText.replace('€', '').trim());
+
+                    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+                    cart.push({ title, price });
+                    localStorage.setItem('cart', JSON.stringify(cart));
+
+                    button.classList.add('clicked');
+                    setTimeout(() => {
+                        button.classList.remove('clicked');
+                    }, 200);
+
+                    updateCartCount();
+                });
+            });
+
+            function updateCartCount() {
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                const countElement = document.getElementById('cart-count');
+                if (countElement) {
+                    countElement.textContent = cart.length;
+                }
+            }
+
+            function scrollToContact() {
+                document.getElementById('contact').scrollIntoView({ behavior: "smooth" });
+            }
+
+            // Rendre scrollToContact global (pour onclick dans HTML)
+            window.scrollToContact = scrollToContact;
+
+            // Initialiser le compteur au chargement
+            updateCartCount();
+        });
+    </script>
 </body>
 </html>
